@@ -10,5 +10,7 @@
   "configuration": "Release",
   "s3-prefix": "Project1/",
   "template": "serverless.template",
-  "template-parameters": ""
+  "template-parameters": "",
+  "s3-bucket": "awstest01bucket20260511",
+  "stack-name": "WebApiTest01"
 }
