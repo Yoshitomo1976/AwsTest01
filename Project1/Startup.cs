@@ -39,7 +39,7 @@ namespace Project1
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty; // ルートURLでSwagger UIを表示
 
                 // タブの初期状態制御
