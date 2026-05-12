@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi;
+using AwsTest01.Application;
 
 namespace Project1
 {
@@ -15,6 +16,9 @@ namespace Project1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<ITestInterface, TestService>();
+
             // Swagger生成サービスを追加
             services.AddSwaggerGen(c =>
             {
