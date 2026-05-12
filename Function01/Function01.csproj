@@ -14,4 +14,7 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="2.8.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.5" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AwsTest01.Application\AwsTest01.Application.csproj" />
+  </ItemGroup>
 </Project>
