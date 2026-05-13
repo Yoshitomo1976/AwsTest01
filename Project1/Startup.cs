@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi;
 using AwsTest01.Application;
+using Microsoft.OpenApi.Models;
 
 namespace Project1
 {
@@ -28,6 +29,45 @@ namespace Project1
                     Version = "v1"
                 });
                 c.EnableAnnotations();
+
+                var cognitoDomain = Configuration["Cognito:Domain"]!;
+
+                c.AddSecurityDefinition("cognito", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Description = "Cognito Authorization Code Flow with PKCE",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"{cognitoDomain}/oauth2/authorize"),
+                            TokenUrl = new Uri($"{cognitoDomain}/oauth2/token"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "openid", "OpenID Connect" },
+                                { "email", "Email" },
+                                { "profile", "Profile" }
+                            }
+                        }
+                    }
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "cognito"
+                            }
+                        },
+                        new[] { "openid", "email", "profile" }
+                    }
+                });
+
+
             });
         }
 
@@ -50,6 +90,13 @@ namespace Project1
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
                 c.DefaultModelsExpandDepth(-1);
                 c.EnableFilter();
+
+                // Cognito認証設定
+                c.OAuthClientId(Configuration["Cognito:ClientId"]);
+                c.OAuthAppName("My API Swagger UI");
+
+                // Authorization Code + PKCE
+                c.OAuthUsePkce();
             });
 
             app.UseHttpsRedirection();
