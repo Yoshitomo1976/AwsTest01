@@ -4,6 +4,7 @@ aws cognito-idp create-user-pool --pool-name "Test user pool"
 # ユーザープール確認
 aws cognito-idp list-user-pools --max-results 10
 
+
 # IDを変数にセットする
 userpool_id=$(aws cognito-idp list-user-pools --max-results 10 --query 'UserPools[0].Id' --output text)
 echo $userpool_id
@@ -47,6 +48,9 @@ client_id=$(
 )
 
 echo "$client_id"
+
+# クライアントIDを変数にセット
+client_id=$(aws cognito-idp list-user-pool-clients --user-pool-id $userpool_id --query 'UserPoolClients[0].ClientId' --output text)
 
 # クライアントの内容を確認
 aws cognito-idp describe-user-pool-client \

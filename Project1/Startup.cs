@@ -1,6 +1,8 @@
 ﻿using Microsoft.OpenApi;
 using AwsTest01.Application;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Project1
 {
@@ -69,6 +71,59 @@ namespace Project1
 
 
             });
+
+            var region = Configuration["Cognito:Region"]!;
+            var userPoolId = Configuration["Cognito:UserPoolId"]!;
+            var clientId = Configuration["Cognito:ClientId"]!;
+
+            var issuer = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}";
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = issuer;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = issuer,
+                        ValidateLifetime = true,
+
+                        // Cognito の access token は aud ではなく client_id を確認する
+                        ValidateAudience = false,
+
+                        NameClaimType = "username",
+                        RoleClaimType = "cognito:groups"
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var claims = context.Principal?.Claims;
+
+                            var tokenUse = claims?.FirstOrDefault(c => c.Type == "token_use")?.Value;
+                            var tokenClientId = claims?.FirstOrDefault(c => c.Type == "client_id")?.Value;
+
+                            if (tokenUse != "access")
+                            {
+                                context.Fail("Access token is required.");
+                                return Task.CompletedTask;
+                            }
+
+                            if (tokenClientId != clientId)
+                            {
+                                context.Fail("Invalid client_id.");
+                                return Task.CompletedTask;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -97,12 +152,14 @@ namespace Project1
 
                 // Authorization Code + PKCE
                 c.OAuthUsePkce();
+                //c.OAuth2RedirectUrl("https://cphr17sdgi.execute-api.ap-northeast-1.amazonaws.com/Prod/swagger/oauth2-redirect.html");
             });
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
