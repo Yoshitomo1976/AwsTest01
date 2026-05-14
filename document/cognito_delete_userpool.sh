@@ -9,6 +9,7 @@ aws cognito-idp delete-user-pool-domain --user-pool-id $userpool_id --domain $do
 
 # クライアント削除
 client_id=$(aws cognito-idp list-user-pool-clients --user-pool-id $userpool_id --query 'UserPoolClients[0].ClientId' --output text)
+echo $client_id
 aws cognito-idp delete-user-pool-client --user-pool-id $userpool_id --client-id $client_id
 
 
