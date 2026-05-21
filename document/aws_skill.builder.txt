@@ -1,1 +1,82 @@
 
+AWS Technical Essentials Part 2 (Japanese)
+
+ストレージタイプ
+  ブロックストレージ
+    頻繁に更新されるデータ
+  オブジェクトストレージ
+    静的なデータ保存に適する
+
+Amazon EFS と Amazon FSx を使用したファイルストレージ
+  Amazon Elastic File System (Amazon EFS)
+    ファイルの追加や削除に応じて自動的に拡張/縮小する、管理不要のファイルシステム
+  Amazon FSx
+    信頼性、セキュリティ、スケーラビリティ、および幅広い機能を備えたフルマネージドサービス
+
+Amazon EC2 インスタンスストアと Amazon EBS を使用したブロックストレージ
+  EC2で使用するストレージタイプ
+    インスタンスストア
+    EBS ボリューム
+
+Amazon S3 を使用したオブジェクトストレージ
+  S3はオブジェクトストレージである
+  IAM ポリシー、S3 バケットポリシー
+  ストレージクラス
+  バージョニング
+
+適切なストレージサービスの選択
+  Amazon EC2 インスタンスストア
+  Amazon EBS
+  Amazon S3
+  Amazon EFS
+  Amazon FSx
+
+デモンストレーション: Amazon S3 バケットを作成する
+
+モジュール 4 ナレッジチェック
+
+AWS のデータベースの基礎
+
+Amazon RDS
+  商用: Oracle、SQL Server
+  オープンソース: MySQL、PostgreSQL、MariaDB
+  クラウドネイティブ: Aurora 
+
+  セキュリティ
+    IAM、セキュリティグループ、暗号化、接続
+
+目的別データベース
+  Amazon DynamoDB
+  Amazon ElastiCache 
+  Amazon MemoryDB for Redis
+  Amazon DocumentDB
+  Amazon Keyspaces 
+  Amazon Neptune
+  Amazon TimeStream
+  Amazon Quantum Ledger Database
+
+Amazon DynamoDB
+  NoSQL データベースサービス
+  Key-value型
+
+適切なデータベースサービスの選択
+
+デモンストレーション: Amazon DynamoDB を実装して管理する
+
+モジュール 5 ナレッジチェック
+
+モニタリング
+  トラブルはユーザーに検知される前に解決できることが理想的
+  ユーザーはシステム内部の情報を提供できない
+  メトリクスの種類
+    S3、RDS、EC2などサービスごとに存在する
+
+Amazon CloudWatch
+  複数のAWSサービスをモニタして、結果を一元的に表示できる
+  カスタムメトリクスでアプリケーション独自の情報を登録できる
+  Amazon CloudWatch Logs
+    Lambdaの標準ログ分析機能
+
+ソリューションの最適化
+
+Elastic Load Balancing を使用したトラフィックルーティング
