@@ -1,3 +1,7 @@
  Amazon Q Developer Getting Started (日本語吹き替え版)
 
- 
+
+Amazon Q Developer 入門
+
+・VSCode、VisualStudio2022～で使用可能
+・VSCodeでの設定方法を動画で確認できる
