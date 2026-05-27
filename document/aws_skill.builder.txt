@@ -80,3 +80,35 @@ Amazon CloudWatch
 ソリューションの最適化
 
 Elastic Load Balancing を使用したトラフィックルーティング
+  Application Load Balancer
+  Network Load Balancer
+  Gateway Load Balancer
+
+Amazon EC2 Auto Scaling
+  垂直方向のスケーリング
+    片方を止める→止めたほうのサイズアップ
+    →アクティブ/パッシブ切り替え→もう片方もそろえる
+    ・手動で行う
+  水平方向
+    単純にインスタンスを追加する
+    ・自動的に行われる
+  スケーリングポリシー
+    シンプルスケーリング
+    ステップスケーリング
+    ターゲット追跡スケーリング
+
+デモンストレーション: 従業員ディレクトリアプリケーションの高可用性を実現する
+  アプリケーションロードバランサーを追加
+  セキュリティグループを設定
+  ターゲットグループに登録
+  起動テンプレートを設定
+
+従業員ディレクトリアプリケーションの再設計
+  EC2からAPI Gateway+Lambdaに変更する
+
+モジュール 6 ナレッジチェック
+
+AWS を利用したイノベーション
+  Amazon Q Developer
+    AIと連動したコード生成
+    VSCodeに入れると良い
