@@ -1,0 +1,87 @@
+AWSの検証用に以下のようなシナリオを考えています。
+現実的なシナリオといえますか？
+実装言語は.NET 8.0を想定しています。
+
+１．AWSCognitoで認証してトークンを取得
+２．トークンを使用してAppSyncをコール
+３．AppSyncからLambda関数をコールする
+４．Lambda関数からDynamoDBにユーザー情報とAppSyncの入力値を保存する
+
+Client
+  ↓ Cognito Hosted UI / OAuth2 / SRP などでログイン
+Cognito User Pool
+  ↓ ID Token / Access Token
+Client
+  ↓ Authorization: Bearer <token>
+AppSync GraphQL API
+  ↓ Resolver
+Lambda (.NET 8)
+  ↓ PutItem / UpdateItem
+DynamoDB
+
+// Lambda入力
+{
+  "arguments": {
+    "input": {
+      "message": "test",
+      "category": "memo"
+    }
+  },
+  "identity": {
+    "username": "xxxxx",
+    "claims": {
+      "sub": "CognitoユーザーID",
+      "email": "user@example.com"
+    }
+  }
+}
+
+// GraphQLメモ
+type Mutation {
+  saveUserInput(input: SaveUserInput!): SaveUserInputResult!
+}
+
+input SaveUserInput {
+  title: String!
+  body: String
+}
+
+type SaveUserInputResult {
+  id: ID!
+  userSub: String!
+  title: String!
+  body: String
+  createdAt: String!
+}
+
+type Query {
+  dummy: String
+}
+
+// プロジェクト構成
+AppSyncCognitoSample/
+├─ src/
+│  ├─ AppSyncCognitoSample.Lambda/
+│  │  ├─ Function.cs
+│  │  ├─ Models/
+│  │  │  ├─ AppSyncRequest.cs
+│  │  │  ├─ SaveUserInput.cs
+│  │  │  └─ SaveUserInputResult.cs
+│  │  ├─ Services/
+│  │  │  ├─ IUserInputRepository.cs
+│  │  │  └─ DynamoDbUserInputRepository.cs
+│  │  └─ AppSyncCognitoSample.Lambda.csproj
+│  │
+│  └─ AppSyncCognitoSample.ClientTest/
+│     ├─ Program.cs
+│     └─ AppSyncCognitoSample.ClientTest.csproj
+│
+├─ infra/
+│  ├─ template.yaml
+│  └─ schema.graphql
+│
+├─ tests/
+│  └─ AppSyncCognitoSample.Lambda.Tests/
+│
+├─ README.md
+└─ AppSyncCognitoSample.sln
